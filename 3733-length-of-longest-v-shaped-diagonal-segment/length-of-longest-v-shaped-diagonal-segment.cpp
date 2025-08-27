@@ -1,9 +1,7 @@
-//initialization
-static constexpr int dir[4][2] = {{-1,1},{1,1},{1,-1},{-1,-1}};
 class Solution {
 private:
     int n,m;
-
+    static constexpr int dir[4][2] = {{-1,1},{1,1},{1,-1},{-1,-1}};
     int dfs(int i , int j ,int dis,vector<vector<int>>&grid, bool turned,int num, vector<vector<vector<vector<int>>>>&dp){
         //base case
         if((i<0 || j<0 || i>=n || j>=m || grid[i][j] != num)){
