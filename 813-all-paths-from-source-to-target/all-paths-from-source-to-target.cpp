@@ -5,9 +5,7 @@ public:
         int n = graph.size();
         //queue
         queue<pair<int,vector<int>>> q;
-        vector<int> ans;
-        ans.push_back(0);
-        q.push({0,ans});
+        q.push({0,{0}});
         while(!q.empty()){
             auto [u,ans] = q.front();
             q.pop();
