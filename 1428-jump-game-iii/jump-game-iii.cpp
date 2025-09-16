@@ -1,29 +1,25 @@
 class Solution {
+private:
+    bool bfs(int i, vector<int>& arr,int n){
+        //base case
+        if(i < 0 || i >= n){
+            return false;
+        }
+        //negative number
+        if(arr[i] < 0){
+            return false;
+        }
+        arr[i] = arr[i] * (-1);
+        //termination
+        if(arr[i] == 0){
+            return true;
+        }
+        return (bfs(i+arr[i],arr,n) || bfs(i-arr[i],arr,n));
+
+    }
 public:
     bool canReach(vector<int>& arr, int start) {
-        //initialization
-        queue<pair<int,int>> q;
         int n = arr.size();
-        vector<bool> vis(n,false);
-        //using queue
-        q.push({start,arr[start]});
-        while(!q.empty()){
-            auto [index, value] = q.front();
-            q.pop();
-            if(value == 0){
-                return true;
-            }
-            int pos1 = index - value;
-            int pos2 = index + value;
-            if(pos1 >=0 && !vis[pos1]){
-                vis[pos1] = true;
-                q.push({pos1, arr[pos1]});
-            }
-            if(pos2 < n && !vis[pos2]){
-                vis[pos2] = true;
-                q.push({pos2, arr[pos2]});
-            }
-        }
-        return false;
+        return bfs(start,arr,n);
     }
 };
