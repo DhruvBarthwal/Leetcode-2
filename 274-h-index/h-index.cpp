@@ -4,19 +4,9 @@ public:
         int n = citations.size();
         int ans = 0;
         sort(citations.begin(), citations.end());
-        for(int i = n;i>0;i--){
-            int count = 0;
-            if(ans != 0){
-                break;
-            }
-            for(int j = n-1;j>=0;j--){
-                if(citations[j] >= i){
-                    count++;
-                    if(count == i){
-                        ans = i;
-                        break;
-                    }
-                }
+        for(int i = n-1;i>=0;i--){
+            if(citations[i] >= ans+1){
+                ans++;
             }
         }
         return ans;
