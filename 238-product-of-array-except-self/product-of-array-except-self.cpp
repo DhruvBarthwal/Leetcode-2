@@ -4,29 +4,20 @@ public:
         int n = nums.size();
         vector<int> result, prefix(n),suffix(n);
         //for prefix
-        prefix[0] = nums[0];
-        for(int i = 0;i<n-1;i++){
-            prefix[i+1] = nums[i+1]*prefix[i];
+        prefix[0] = 1;
+        for(int i = 1;i<n;i++){
+            prefix[i] = nums[i-1]*prefix[i-1];
         }
         //for suffix
-        suffix[n-1] = nums[n-1];
-        for(int i = n-1; i>0;i--){
-            suffix[i-1] = nums[i-1]*suffix[i];
+        suffix[n-1] = 1;
+        for(int i = n-2; i>=0;i--){
+            suffix[i] = nums[i+1]*suffix[i+1];
         }
         //traversing the array
         for(int i = 0;i<n;i++){
-            int a,b;
-            if(i== 0){
-                result.push_back(suffix[1]);
-            }
-            else if(i == n-1){
-                result.push_back(prefix[n-2]);
-            }
-            else{
-                int a = prefix[i-1];
-                int b = suffix[i+1];
+                int a = prefix[i];
+                int b = suffix[i];
                 result.push_back(a*b);
-            }
         }
         return result;
     }
