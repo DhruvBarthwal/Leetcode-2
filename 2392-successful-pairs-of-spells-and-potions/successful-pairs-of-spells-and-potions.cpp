@@ -1,9 +1,10 @@
 class Solution {
 public:
-    int binarySearch(int val, int m ,long long success, vector<int>& spells, vector<int>& potions){
-        int s = 0, e= m-1, mid = s + (e-s)/2;
+    int binarySearch(int val, int m ,long long success, vector<int>& potions){
+        int s = 0, e= m-1;
         int ans = m;
         while(s<=e){
+            int mid = s + (e-s)/2;
             long long prod = 1LL * val * potions[mid];
             if(prod >= success){
                 ans = mid;
@@ -12,7 +13,6 @@ public:
             else{
                 s = mid+1;
             }
-            mid = s+(e-s)/2;
         }
         return m-ans;
     }
@@ -25,7 +25,7 @@ public:
         vector<int> result;
         //traversing the array
         for(int i =0;i<n;i++){
-            int value = binarySearch(spells[i],m,success,spells,potions);
+            int value = binarySearch(spells[i],m,success,potions);
             result.push_back(value);
         }
         return result;
