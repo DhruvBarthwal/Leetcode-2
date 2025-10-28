@@ -1,71 +1,59 @@
 class NumArray {
-private:
-    vector<int> segTree;
+public:
+    //initialization
     int n;
-
-    void buildTree(vector<int>&nums, int i, int l, int r){
-        //base case (leaf nodes)
-        if(l == r){
-            segTree[i] = nums[l];
-            return;
-        }
-        //mid
-        int mid = l+(r-l)/2;
-        //left child
-        buildTree(nums,2*i+1,l,mid);
-        //right child
-        buildTree(nums,2*i+2,mid+1,r);
-        //range sum
-        segTree[i] = segTree[2*i+1] + segTree[2*i+2];
-    }
-    void updateTree(int i,int l ,int r, int pos,int val){
-        //base case
-        if(l==r){
-            segTree[i] = val;
-            return;
-        }
-        //mid
-        int mid = l+(r-l)/2;
-        if(pos<=mid){
-            //left child
-            updateTree(2*i+1,l,mid,pos,val);
+    vector<int> segTree;
+    NumArray(vector<int>& nums) {
+        if(nums.size() > 0){
+            n = nums.size();
+            segTree.resize(4*n);
+            buildTree(nums,0,0,n-1);
         }
         else{
-            //right child
-            updateTree(2*i+2,mid+1,r,pos,val);
+            return;
         }
-        segTree[i] = segTree[2*i+1] + segTree[2*i+2];
-    }
-    int query(int i, int l, int r,int ql, int qr){
-        //base case
-        if(ql>r || qr < l){
-            return 0;
-        }
-        if(ql<=l && r<= qr){
-            return segTree[i];
-        }
-        //mid
-        int mid = l+(r-l)/2;
-        return query(2*i+1,l,mid,ql,qr) + query(2*i+2,mid+1,r,ql,qr);
-    } 
-
-public:
-    NumArray(vector<int>& nums) {
-        n = nums.size();
-        segTree.resize(4*n,0);
-        //buildTree
-        buildTree(nums,0,0,n-1);
     }
     
     void update(int index, int val) {
-        //update the value
         updateTree(0,0,n-1,index,val);
     }
     
     int sumRange(int left, int right) {
-        //sum range
         return query(0,0,n-1,left,right);
     }
+    private:
+    void buildTree(vector<int>&nums,int idx,int low,int high){
+        //if reaches leaf node
+        if(low == high){
+            segTree[idx] = nums[low];
+            return;
+        }
+        int mid = (low + high)/2;
+        buildTree(nums,2*idx+1, low,mid);
+        buildTree(nums,2*idx+2,mid+1,high);
+        segTree[idx] = segTree[2*idx + 1] + segTree[2*idx+2];
+    }
+    int query(int idx, int low, int high, int l, int r){
+        if(r < low || high < l) return 0;
+        if(l <= low && high<=r) return segTree[idx];
+        int mid = (low+high)/2;
+        return query(2*idx + 1,low,mid,l,r) + query(2*idx+2,mid+1,high ,l ,r);
+    }
+    void updateTree(int idx,int low, int high, int pos, int val){
+        if(low == high){
+            segTree[idx] = val;
+            return;
+        }
+        int mid = (low + high)/2;
+        if(pos<=mid){
+            updateTree(2*idx+1,low,mid,pos,val);
+        }
+        else{
+            updateTree(2*idx+2,mid+1,high,pos,val);
+        }
+        segTree[idx] = segTree[2*idx+1] + segTree[2*idx + 2];
+    }
+
 };
 
 /**
