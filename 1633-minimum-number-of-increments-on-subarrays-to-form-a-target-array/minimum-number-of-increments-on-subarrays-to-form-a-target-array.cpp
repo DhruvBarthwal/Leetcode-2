@@ -1,5 +1,6 @@
 class Solution {
 public:
+//top down 
 int solve(int i, int n ,int prev ,vector<int>&target, vector<int>&dp){
     //base case
     if(i == n) return 0;
@@ -18,7 +19,12 @@ int solve(int i, int n ,int prev ,vector<int>&target, vector<int>&dp){
 }
     int minNumberOperations(vector<int>& target) {
         int n = target.size();
-        vector<int>dp(n+1,-1);
-        return solve(0,n,0,target,dp);
+        int prev = 0, ans = 0;
+        for(int i = 0;i<n;i++){
+            int val = target[i] - prev;
+            if(val > 0) ans += val;
+            prev = target[i];
+        }
+        return ans;
     }
 };
