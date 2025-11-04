@@ -8,6 +8,7 @@ struct cmp{
             return a.second < b.second;
         }
 };
+//count the sum
 void countSum(int &sum,priority_queue<pair<int,int>, vector<pair<int,int>>,cmp> pq, int x){
     while(!pq.empty() && x>0){
         auto[a,b] = pq.top();
@@ -16,6 +17,7 @@ void countSum(int &sum,priority_queue<pair<int,int>, vector<pair<int,int>>,cmp> 
         x--;
     }
 }
+//add the sum
 void addPair(int a, int b,priority_queue<pair<int,int>, vector<pair<int,int>>,cmp>&pq){
     //base case
     if(pq.empty()){
@@ -33,12 +35,14 @@ void addPair(int a, int b,priority_queue<pair<int,int>, vector<pair<int,int>>,cm
     pq.push({val,cnt}); 
 }
     vector<int> findXSum(vector<int>& nums, int k, int x) {
+        //initialization
         int n = nums.size();
         unordered_map<int,int> freq;
         vector<int> ans;
         int sum = 0;
         priority_queue<pair<int,int>, vector<pair<int,int>>,cmp> pq;
-        //create window
+
+        //freq count
         for(int i = 0;i<k;i++){
             int val = nums[i];
             freq[val]++;
@@ -46,12 +50,15 @@ void addPair(int a, int b,priority_queue<pair<int,int>, vector<pair<int,int>>,cm
         for(auto [val,cnt] : freq){
             pq.push({val,cnt});
         }
+        //add the sum
         countSum(sum,pq,x);
         ans.push_back(sum);
         sum = 0;
         for(int i = k;i<n;i++){
+            //new element
             freq[nums[i]]++;
             addPair(nums[i],freq[nums[i]],pq);
+            //removing initial element
             freq[nums[i-k]]--;
             addPair(nums[i-k],freq[nums[i-k]],pq);
             countSum(sum,pq,x);
