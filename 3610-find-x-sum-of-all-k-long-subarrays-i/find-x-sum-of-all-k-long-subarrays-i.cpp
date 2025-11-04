@@ -1,5 +1,6 @@
 class Solution {
 public:
+vector<int> ans;
 struct cmp{
     bool operator()(const pair<int,int>&a, const pair<int,int>&b){
             if(a.second == b.second){
@@ -9,13 +10,14 @@ struct cmp{
         }
 };
 //count the sum
-void countSum(int &sum,priority_queue<pair<int,int>, vector<pair<int,int>>,cmp> pq, int x){
+void countSum(int sum,priority_queue<pair<int,int>, vector<pair<int,int>>,cmp> pq, int x){
     while(!pq.empty() && x>0){
         auto[a,b] = pq.top();
         pq.pop();
         sum += (a*b);
         x--;
     }
+    ans.push_back(sum);
 }
 //add the sum
 void addPair(int a, int b,priority_queue<pair<int,int>, vector<pair<int,int>>,cmp>&pq){
@@ -38,7 +40,6 @@ void addPair(int a, int b,priority_queue<pair<int,int>, vector<pair<int,int>>,cm
         //initialization
         int n = nums.size();
         unordered_map<int,int> freq;
-        vector<int> ans;
         int sum = 0;
         priority_queue<pair<int,int>, vector<pair<int,int>>,cmp> pq;
 
@@ -52,8 +53,7 @@ void addPair(int a, int b,priority_queue<pair<int,int>, vector<pair<int,int>>,cm
         }
         //add the sum
         countSum(sum,pq,x);
-        ans.push_back(sum);
-        sum = 0;
+
         for(int i = k;i<n;i++){
             //new element
             freq[nums[i]]++;
@@ -62,8 +62,6 @@ void addPair(int a, int b,priority_queue<pair<int,int>, vector<pair<int,int>>,cm
             freq[nums[i-k]]--;
             addPair(nums[i-k],freq[nums[i-k]],pq);
             countSum(sum,pq,x);
-            ans.push_back(sum);
-            sum =0;
         }
         return ans;
     }
