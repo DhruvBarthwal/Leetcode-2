@@ -25,22 +25,44 @@ vector<vector<vector<long long>>>dp;
 //         dp.assign(n,vector<vector<long long>>(m,vector<long long>(k,-1)));
 //         return solve(0,0,0,grid,k);
 //     }
-        int numberOfPaths(vector<vector<int>>& grid, int k) {
+//     int numberOfPaths(vector<vector<int>>& grid, int k) {
+    //     n = grid.size();
+    //     m = grid[0].size();
+    //     dp.assign(n,vector<vector<long long>>(m,vector<long long>(k,0)));
+        
+    //     dp[0][0][grid[0][0] % k] = 1;
+
+    //     for(int i = 0;i<n;i++){
+    //         for(int j = 0;j<m;j++){
+    //             for(int r = 0;r<k;r++){
+    //                 int new_r = (grid[i][j] + r) % k;
+    //                 if(j>0) dp[i][j][new_r] = (dp[i][j][new_r] + dp[i][j-1][r]) % M;
+    //                 if(i>0) dp[i][j][new_r] = (dp[i][j][new_r] + dp[i-1][j][r]) % M;
+    //             }
+    //         }
+    //     }
+    //     return dp[n-1][m-1][0];
+    // }
+    int numberOfPaths(vector<vector<int>>& grid, int k) {
         n = grid.size();
         m = grid[0].size();
-        dp.assign(n,vector<vector<long long>>(m,vector<long long>(k,0)));
+        vector<vector<long long>>prev(m+1,vector<long long>(k,0));
+        vector<vector<long long>>curr(m+1,vector<long long>(k,0));
         
-        dp[0][0][grid[0][0] % k] = 1;
+        prev[0][grid[0][0] % k] = 1;
 
         for(int i = 0;i<n;i++){
+            curr.assign(m,vector<long long>(k,0));
             for(int j = 0;j<m;j++){
                 for(int r = 0;r<k;r++){
                     int new_r = (grid[i][j] + r) % k;
-                    if(j>0) dp[i][j][new_r] = (dp[i][j][new_r] + dp[i][j-1][r]) % M;
-                    if(i>0) dp[i][j][new_r] = (dp[i][j][new_r] + dp[i-1][j][r]) % M;
+                    if(j>0) curr[j][new_r] = (curr[j][new_r] + curr[j-1][r]) % M;
+                    if(i>0) curr[j][new_r] = (curr[j][new_r] + prev[j][r]) % M;
+                    if(i == 0 && j == 0) curr[j][grid[0][0] % k] = 1;
                 }
             }
+            prev = curr;
         }
-        return dp[n-1][m-1][0];
+        return prev[m-1][0];
     }
 };
