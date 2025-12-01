@@ -11,15 +11,17 @@ bool isBool(long long num, vector<int>&time, int totalTrips){
 }
     long long minimumTime(vector<int>& time, int totalTrips) {
         long long s = 1, e = 1e14;
-        while(s < e){
+        long long ans = 0;
+        while(s <= e){
             long long mid = s + (e-s)/2;
             if(isBool(mid,time,totalTrips)){
-                e = mid;
+                ans = mid;
+                e = mid-1;
             }
             else{
                 s = mid+1;
             }
         }
-        return s; 
+        return ans; 
     }
 };
