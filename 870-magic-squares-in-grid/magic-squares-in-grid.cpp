@@ -14,16 +14,13 @@ bool checkCol(int row, int col , int sum,vector<vector<int>>& grid){
 
 }
 bool validate(int row , int col ,vector<vector<int>>& grid){
-    unordered_map<int,int>mp;
+    int mask = 0;
     for(int i = row-1;i<=row+1;i++){
         for(int j = col-1;j<=col+1;j++){
             int value = grid[i][j];
-            if(mp.count(value) || value <1 || value > 9){
-                return false;
-            }
-            else{
-                mp[value]++;
-            }
+            if(value > 9 || value < 1) return false;
+            else if(mask & (1<<value)) return false;
+            else mask |= (1<<value);
         }
     }
     return true;
