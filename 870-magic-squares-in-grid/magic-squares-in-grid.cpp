@@ -34,12 +34,19 @@ bool validate(int row , int col ,vector<vector<int>>& grid){
 
         for(int row = 1;row < n-1;row++){
             for(int col = 1;col< m-1;col++){
+                //take one of the sums to check rest
                 int sum = grid[row][col] + grid[row-1][col] + grid[row + 1][col];
+                //check all rows have same sum
                 bool cond1 = checkRow(row,col,sum,grid);
+                //check all cols have same sum
                 bool cond2 = checkCol(row,col,sum,grid);
+                //check for left diagonal
                 bool cond3 = (grid[row][col] + grid[row-1][col-1] + grid[row + 1][col + 1]) == sum;
+                //check for right diagonal
                 bool cond4 = (grid[row][col] + grid[row-1][col+1] + grid[row+1][col-1]) == sum;
+                //check for distinct values
                 bool cond5 = validate(row,col,grid);
+            
                 if(cond1 && cond2  && cond3 && cond4 && cond5){
                     count++;
                 }
