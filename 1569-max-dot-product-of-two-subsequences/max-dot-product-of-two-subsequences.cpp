@@ -21,20 +21,38 @@ public:
     // }
 
 //CASE 2 : BOTTOM UP APPROACH
-    vector<vector<long long>> dp;
+    // vector<vector<long long>> dp;
+    // int maxDotProduct(vector<int>& nums1, vector<int>& nums2) {
+    //     int n = nums1.size();
+    //     int m = nums2.size();
+    //     dp.assign(n+1,vector<long long>(m+1,LLONG_MIN));
+        
+    //     for(int i = n-1;i>=0;i--){
+    //         for(int j = m-1;j>=0;j--){
+    //             long long take = (nums1[i] * nums2[j]) + max(0LL, dp[i+1][j+1]);
+    //             long long skip1 = dp[i+1][j];
+    //             long long skip2 = dp[i][j+1];
+    //             dp[i][j] = max({take,skip1,skip2});
+    //         }
+    //     }
+    //     return dp[0][0];
+    // }
+//CASE 3 : Optimized (Space (O(m)))
     int maxDotProduct(vector<int>& nums1, vector<int>& nums2) {
         int n = nums1.size();
         int m = nums2.size();
-        dp.assign(n+1,vector<long long>(m+1,LLONG_MIN));
+        vector<long long> prev(m+1,LLONG_MIN);
+        vector<long long> curr(m+1,LLONG_MIN);
         
         for(int i = n-1;i>=0;i--){
             for(int j = m-1;j>=0;j--){
-                long long take = (nums1[i] * nums2[j]) + max(0LL, dp[i+1][j+1]);
-                long long skip1 = dp[i+1][j];
-                long long skip2 = dp[i][j+1];
-                dp[i][j] = max({take,skip1,skip2});
+                long long take = (nums1[i] * nums2[j]) + max(0LL, prev[j+1]);
+                long long skip1 = prev[j];
+                long long skip2 = curr[j+1];
+                curr[j] = max({take,skip1,skip2});
             }
+            prev = curr;
         }
-        return dp[0][0];
+        return prev[0];
     }
 };
