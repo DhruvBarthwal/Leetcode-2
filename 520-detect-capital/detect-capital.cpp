@@ -5,9 +5,9 @@ public:
         int lowerCount = 0;
         int upperCount = 0;
         for(int x : word){
-            if(x >= 'a' && x <= 'z') lowerCount++;
-            else if(x >= 'A' && x <= 'Z') upperCount++;
+            if(islower(x)) lowerCount++;
+            else if(isupper(x)) upperCount++;
         }
-        return (lowerCount == n || upperCount == n || upperCount == 1 && word[0] >='A' && word[0] <= 'Z');
+        return (lowerCount == n || upperCount == n || upperCount == 1 && isupper(word[0]) );
     }
 };
