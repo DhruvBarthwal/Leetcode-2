@@ -11,7 +11,6 @@ public:
                 val = (val << 1) | (temp & 1);
                 temp >>= 1;
             }
-            cout<<val<<" "<<temp<<" ";
             pq.push({val,nums[i]});
         }
         while(!pq.empty()){
