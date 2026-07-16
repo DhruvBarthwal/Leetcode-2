@@ -1,39 +1,25 @@
 class Solution {
-// private:
-//     int solve(vector<int>& nums, int n , int i,int prevIndex, vector<vector<int>>&dp){
-//         //base case
-//         if(i == n){
-//             return 0;
-//         }
-//         if(dp[i][prevIndex+1] != -1){
-//             return dp[i][prevIndex+1];
-//         }
-//         //include and exclude process
-//         int skip = solve(nums,n,i+1,prevIndex,dp);
-
-//         int take = 0;
-//         if(prevIndex == -1 || nums[prevIndex]<nums[i]){
-//              take = 1+ solve(nums,n,i+1,i,dp);
-//         }
-//         //return value
-//         return dp[i][prevIndex+1] = max(take,skip);
-//     }
 public:
+vector<vector<int>> dp;
+int n;
+int solve(int i, int prev, vector<int>& nums){
+    //base case
+    if(i == n) return 0;
+    if(dp[i][prev+1] != -1) return dp[i][prev+1];
+
+    int ans = solve(i+1,prev,nums);
+
+    if(prev == -1 || (prev != -1 && nums[prev] < nums[i])){
+        ans = max(ans, 1 + solve(i+1,i,nums));
+    }
+
+    return dp[i][prev+1] = ans;
+}
     int lengthOfLIS(vector<int>& nums) {
         //initialization
-        int n = nums.size();
-        // vector<vector<int>>dp(n,vector<int>(n+1,-1));
-        // return solve(nums,n,0,-1,dp);
-        vector<int>res;
-        for(int i = 0;i<n;i++){
-            auto it = lower_bound(res.begin(),res.end(),nums[i]);
-            if(it == res.end()){
-                res.push_back(nums[i]);
-            }
-            else{
-                *it = nums[i];
-            }
-        }
-        return  res.size();
+        n = nums.size();
+        dp.assign(n,vector<int>(n+1,-1));
+
+        return solve(0,-1,nums);  
     }
 };
