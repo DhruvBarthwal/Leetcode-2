@@ -1,32 +1,52 @@
 class Solution {
 public:
-    int findNumberOfLIS(vector<int>& nums) {
-        //initialization
-        int n = nums.size();
-        vector<int> dp(n,1);
-        vector<int> count(n,1);
+    //global variable
+    int n;
+    vector<pair<int,int>> dp; //length , count
+
+    pair<int,int> solve(int i, vector<int>& nums){
+        //base case
+        if(dp[i].first != -1) return dp[i];
+
         int maxLen = 1;
-        //traversing the array
-        for(int i = 0;i<n;i++){
-            for(int j = 0;j<i;j++){
-                if(nums[j] < nums[i]){
-                    if(dp[j]+1>dp[i]){
-                        dp[i] = dp[j]+1;
-                        count[i] = count[j];
-                    }
-                    else if(dp[j]+1 == dp[i]){
-                        count[i]+= count[j];
-                    }
+        int maxCnt = 1;
+
+        for(int j = i+1;j<n;j++){
+            if(nums[i] < nums[j]){
+                auto [len , cnt] = solve(j,nums);
+
+                if(len + 1  > maxLen){
+                    maxLen = 1 + len;
+                    maxCnt = cnt;
+                }
+                else if(1 + len == maxLen){
+                    maxCnt += cnt;
                 }
             }
-            maxLen = max(maxLen, dp[i]);
         }
-        int result = 0;
+        return dp[i] = {maxLen,maxCnt};
+    }
+
+    int findNumberOfLIS(vector<int>& nums) {
+        //intialization
+        n = nums.size();
+        dp.assign(n,{-1,-1});
+        
+        int LIS = 0;
+        int ans = 0;
+        //calculating max subsequence
         for(int i = 0;i<n;i++){
-            if(dp[i] == maxLen){
-                result += count[i];
+            auto [len,cnt] = solve(i,nums);
+
+            if(len > LIS){
+                LIS = len;
+                ans = cnt;
+            }
+            else if(len == LIS){
+                ans += cnt;
             }
         }
-        return result;
+
+        return ans;
     }
 };
