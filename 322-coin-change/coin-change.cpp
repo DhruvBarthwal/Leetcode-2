@@ -1,24 +1,30 @@
 class Solution {
 public:
-int n;
-vector<int> dp;
-    int knapsack(int amount, vector<int>&coins){
-        //base case 
+    int n;
+    vector<int> dp;
+
+    int solve(int amount, vector<int>&coins){
         if(amount == 0) return 0;
         if(amount < 0) return INT_MAX;
         if(dp[amount] != -1) return dp[amount];
 
         int ans = INT_MAX;
-        for(int j = n-1;j>=0;j--){
-            int mini = knapsack(amount - coins[j], coins);
-            if(mini != INT_MAX) ans = min(ans,mini + 1); 
+        for(int i = 0;i<n;i++){
+            int temp = solve(amount-coins[i],coins);
+            if(temp != INT_MAX) {
+                int mini = 1 + temp;
+                ans = min(ans,mini);
+            }
         }
         return dp[amount] = ans;
     }
     int coinChange(vector<int>& coins, int amount) {
+        //initialization
         n = coins.size();
         dp.assign(amount+1,-1);
-        int ans = knapsack(amount,coins);
+
+        int ans = solve(amount,coins);
+
         return ans == INT_MAX ? -1 : ans;
     }
 };
