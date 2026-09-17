@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int candy(vector<int>& ratings) {
+        int n = ratings.size();
+        vector<int> count(n,1);
+        for(int i = 0;i<n-1;i++){
+            if(ratings[i] < ratings[i+1]) count[i+1] = count[i] + 1;
+        }
+        for(int i = n-1;i>0;i--){
+            if(ratings[i] < ratings[i-1]) count[i-1] = max(count[i-1],count[i] + 1);
+        }
+
+        return accumulate(count.begin(),count.end(),0);
+    }
+};
